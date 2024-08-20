@@ -16,11 +16,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        tipo = validated_data.get('tipo', 1)  # Default tipo to 1 if not provided
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
-            email   =validated_data['email'],
+            email=validated_data['email'],
             password=validated_data['password'],
-            tipo    =validated_data['tipo']
+            tipo=tipo
         )
         return user
 
@@ -53,16 +54,11 @@ class LojaSerializer(serializers.ModelSerializer):
 
 class TecnicoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Loja
+        model = Tecnico
         fields = '__all__'
 
     def validate_cpf(self, value):
         tecnico = self.instance
-        if tecnico and Loja.objects.filter(cpf=value).exclude(id=tecnico.id).exists():
+        if tecnico and Tecnico.objects.filter(cpf=value).exclude(id=tecnico.id).exists():
             raise serializers.ValidationError("Este CPF já está cadastrado.")
         return value
-    
-class TecnicoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tecnico
-        fields = '__all__'

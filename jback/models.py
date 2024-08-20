@@ -18,7 +18,7 @@ class TipoAcesso(models.Model):
 
 #MODELS CUSTOM
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, tipo=None, **extra_fields):
+    def create_user(self, username, email, password=None, tipo=1, **extra_fields):
         
         if not email:
             raise ValueError('The Email field must be set')
@@ -62,7 +62,7 @@ class Loja(models.Model):
     def __str__(self):
         return self.nome
     
-class Tecnico(AbstractBaseUser):
+class Tecnico(models.Model):
     nome        = models.CharField(max_length=30)
     email       = models.EmailField(unique=True)
     telefone    = models.CharField(max_length=15)
@@ -74,26 +74,11 @@ class Tecnico(AbstractBaseUser):
     cep         = models.CharField(max_length=9)
     nivel       = models.ForeignKey(Nivel, on_delete=models.SET_NULL, null=True)
     habilitado  = models.BooleanField(default=True)
+    termos      = models.BooleanField(default=False)
 
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome', 'cpf']
-
-    objects = CustomUserManager()
+    REQUIRED_FIELDS = ['cpf', 'email']
 
     def __str__(self):
         return self.email
-
-    def save(self, *args, **kwargs):
-        # Criação de um login na tabela CustomUser ao salvar o Técnico
-        if not CustomUser.objects.filter(email=self.email).exists():
-            CustomUser.objects.create_user(
-                username=self.nome,
-                email=self.email,
-                password='mudar123',  # Você pode definir uma senha padrão ou gerar uma aleatória
-                tipo=TipoAcesso.objects.get(descricao='técnico'),
-                nivel=self.nivel,
-                habilitado=self.habilitado
-            )
-        super().save(*args, **kwargs)    
-

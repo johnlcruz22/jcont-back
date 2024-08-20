@@ -25,3 +25,8 @@ def check_cnpj(request):
     cnpj = request.GET.get('cnpj')
     exists = Loja.objects.filter(cnpj=cnpj).exists()
     return JsonResponse({'exists': exists})
+
+def check_cpf(request):
+    cnpj = request.GET.get('cpf')
+    exists = Tecnico.objects.filter(cpf=cpf).exists()
+    return JsonResponse({'exists': exists})

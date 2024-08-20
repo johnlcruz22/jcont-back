@@ -31,7 +31,7 @@ class LoginView(APIView):
     permission_classes = []  # Permitir acesso público
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
+        email    = request.data.get('email')
         password = request.data.get('password')
         
         user = authenticate(request, email=email, password=password)
@@ -88,32 +88,29 @@ class CheckCNPJView(View):
         cnpj = request.GET.get('cnpj')
         exists = Loja.objects.filter(cnpj=cnpj).exists()
         return JsonResponse({'exists': exists})
+
+class CheckCPFView(View):
+    def get(self, request, *args, **kwargs):
+        cpf = request.GET.get('cpf')
+        exists = Tecnico.objects.filter(cpf=cpf).exists()
+        return JsonResponse({'exists': exists})
       
 #TECNICO
 class TecnicoCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        tecnico_data = request.data
-        tecnico_serializer = TecnicoSerializer(data=tecnico_data)
-        
-        if tecnico_serializer.is_valid():
-            tecnico = tecnico_serializer.save()
-            
-            # Criação de usuário correspondente ao Técnico
-            CustomUser.objects.create_user(
-                username=tecnico.nome,
-                email=tecnico.email,
-                password=tecnico_data.get('password'),  # Certifique-se de que a senha esteja no request
-                tipo=TipoAcesso.objects.get(descricao='técnico')
-            )
-            
-            return Response(tecnico_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(tecnico_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print(request.data)
+        serializer = TecnicoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
 class TecnicoListView(generics.ListAPIView):
-    queryset = Tecnico.objects.all()
-    serializer_class = TecnicoSerializer
+    queryset           = Tecnico.objects.all()
+    print(queryset)
+    serializer_class   = TecnicoSerializer
     permission_classes = [IsAuthenticated]
     
 class TecnicoDetailUpdateAPIView(generics.RetrieveUpdateAPIView):
