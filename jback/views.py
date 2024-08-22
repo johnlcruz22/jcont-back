@@ -44,6 +44,13 @@ class LoginView(APIView):
             })
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
+class CustomUserDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, email, *args, **kwargs):
+        user = get_object_or_404(CustomUser, email=email)
+        user.delete()
+        return JsonResponse({'message': 'Usuário excluído com sucesso!'}, status=200)
 
 #LOJA
 class LojaCreateView(APIView):

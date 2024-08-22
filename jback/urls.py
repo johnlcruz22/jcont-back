@@ -14,12 +14,17 @@ from .views import (
     TecnicoListView,
     TecnicoDetailUpdateAPIView,
     TecnicoDetailAPIView,
+    CustomUserDeleteView,
 )
 
 urlpatterns = [
     #ROTAS LOGIN
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
+    
+    # ROTA CUSTOMUSER
+    path('user/delete/<str:email>/', CustomUserDeleteView.as_view(), name='delete_user'),
+    
     #ROTAS LOJAS
     path('lojas/create/',          LojaCreateView.as_view(), name='loja-create'),
     path('lojas/list/',            LojaListView.as_view(), name='lojas-list'),
