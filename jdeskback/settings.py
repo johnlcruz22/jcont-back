@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-4qrv-!lk6d-ok_l@+0r_*=+$8$f3!!jw9jek@j-ogp@#+wdvvd
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000','https://localhost:8000', 'https://127.0.0.1:8000']
 
 # Application definition
 
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'jback',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_extensions',
+    'sslserver',
 ]
 
 REST_FRAMEWORK = {
@@ -152,8 +154,11 @@ AUTHENTICATION_BACKENDS = [
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
+    'http://localhost',
     'http://127.0.0.1:8000',
-]
+    'https://localhost:8000',
+    'https://localhost',
+    'https://127.0.0.1:8000',]
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -164,8 +169,13 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.3']
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
+    'http://localhost',
     'http://127.0.0.1:8000',
+    'https://localhost:8000',
+    'https://localhost',
+    'https://127.0.0.1:8000',
 ]
