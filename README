@@ -1,0 +1,2 @@
+RODAR COM ESSE COMANDO FUTURAMENTE VOU MELHORAR A DOCUMENTACAO
+python manage.py runserver_plus --cert-file localhost.crt --key-file localhost.key 0.0.0.0:8001

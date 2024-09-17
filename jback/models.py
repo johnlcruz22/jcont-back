@@ -15,7 +15,12 @@ class TipoAcesso(models.Model):
     def __str__(self):
         return self.descricao
 
+class TipoServico(models.Model):
+    descricao = models.CharField(max_length=100, unique=True)
 
+    def __str__(self):
+        return self.descricao
+    
 #MODELS CUSTOM
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, tipo=1, **extra_fields):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Loja, Tecnico
+from .models import CustomUser, Loja, Tecnico, TipoServico
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
@@ -50,8 +50,12 @@ class LojaSerializer(serializers.ModelSerializer):
         if loja and Loja.objects.filter(cnpj=value).exclude(id=loja.id).exists():
             raise serializers.ValidationError("Este CNPJ já está cadastrado.")
         return value
-    
-
+  
+class LojaListViewSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Loja
+        fields = ['id', 'nome'] 
+      
 class TecnicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tecnico
@@ -62,3 +66,14 @@ class TecnicoSerializer(serializers.ModelSerializer):
         if tecnico and Tecnico.objects.filter(cpf=value).exclude(id=tecnico.id).exists():
             raise serializers.ValidationError("Este CPF já está cadastrado.")
         return value
+    
+class TecnicoListViewSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tecnico
+        fields = ['id', 'nome'] 
+        
+class TipoServicoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoServico
+        fields = ['id', 'descricao']
+        

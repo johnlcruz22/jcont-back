@@ -169,7 +169,7 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.3']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.4']
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',

@@ -15,6 +15,9 @@ from .views import (
     TecnicoDetailUpdateAPIView,
     TecnicoDetailAPIView,
     CustomUserDeleteView,
+    TecnicoListViewSimple,
+    TipoServicoListView,
+    LojaListViewSimple,
 )
 
 urlpatterns = [
@@ -22,7 +25,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     
-    # ROTA CUSTOMUSER
+    #ROTA CUSTOMUSER
     path('user/delete/<str:email>/', CustomUserDeleteView.as_view(), name='delete_user'),
     
     #ROTAS LOJAS
@@ -32,6 +35,7 @@ urlpatterns = [
     path('lojas/<int:id>/',        LojaDetailAPIView.as_view(), name='loja-detail'),
     path('lojas/check-cnpj/',      CheckCNPJView.as_view(), name='check_cnpj'),
     path('lojas/delete/<int:id>/', LojaDeleteView.as_view(), name='delete_loja'),
+    path('lojas/simple/',          LojaListViewSimple.as_view(), name='lojas-list-simple'),
     
     #ROTAS TECNICO
     path('tecnico/create/',          TecnicoCreateView.as_view(), name='tecnico-create'),
@@ -40,4 +44,11 @@ urlpatterns = [
     path('tecnico/<int:id>/',        TecnicoDetailAPIView.as_view(), name='tecnico-detail'),
     path('tecnico/delete/<int:id>/', TecnicoDeleteView.as_view(), name='delete_tecnico'),
     path('tecnico/check-cpf/',       CheckCPFView.as_view(), name='check_cpf'),
+    path('tecnico/simple/',          TecnicoListViewSimple.as_view(), name='tecnico-list-simple'),
+    
+    #ROTAS GENERICAS
+    path('tipos-servico/', TipoServicoListView.as_view(), name='tipos-servico-list'),
+    
+    #ROTAS CHAMADOS
+    
 ]

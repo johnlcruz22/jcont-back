@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
-from .serializers import CustomUserSerializer, LojaSerializer, TecnicoSerializer
-from .models import CustomUser, Loja, Tecnico, TipoAcesso
+from .serializers import CustomUserSerializer, LojaSerializer, TecnicoSerializer, TecnicoListViewSimpleSerializer, TipoServicoSerializer, LojaListViewSimpleSerializer
+from .models import CustomUser, Loja, Tecnico, TipoAcesso, TipoServico
 from rest_framework.exceptions import ValidationError
 from rest_framework import generics
 from django.views import View
@@ -88,7 +88,11 @@ class LojaDeleteView(APIView):
         loja.delete()
         return JsonResponse({'message': 'Loja excluída com sucesso!'}, status=200)
 
-
+class LojaListViewSimple(generics.ListAPIView):
+    queryset = Loja.objects.all()
+    serializer_class = LojaListViewSimpleSerializer
+    permission_classes = [IsAuthenticated]
+    
 #GENERICOS
 class CheckCNPJView(View):
     def get(self, request, *args, **kwargs):
@@ -101,7 +105,11 @@ class CheckCPFView(View):
         cpf = request.GET.get('cpf')
         exists = Tecnico.objects.filter(cpf=cpf).exists()
         return JsonResponse({'exists': exists})
-      
+
+class TipoServicoListView(generics.ListAPIView):
+    queryset = TipoServico.objects.all()
+    serializer_class = TipoServicoSerializer  
+        
 #TECNICO
 class TecnicoCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -140,3 +148,10 @@ class TecnicoDeleteView(APIView):
         loja.delete()
         return JsonResponse({'message': 'Tecnico excluída com sucesso!'}, status=200)
 
+class TecnicoListViewSimple(generics.ListAPIView):
+    queryset = Tecnico.objects.all()
+    serializer_class = TecnicoListViewSimpleSerializer
+    permission_classes = [IsAuthenticated]
+    
+    
+#CHAMADOS
