@@ -4,5 +4,10 @@ pip install -r requirements.txt
 sempre que adicionar uma nova lib:
 pip freeze > requirements.txt
 
+rolar migrate do banco:
+python manage.py makemigrations
+python manage.py migrate  
+
+
 RODAR COM ESSE COMANDO FUTURAMENTE VOU MELHORAR A DOCUMENTACAO
 python manage.py runserver_plus --cert-file localhost.crt --key-file localhost.key 0.0.0.0:8001
