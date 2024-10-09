@@ -11,3 +11,8 @@ python manage.py migrate
 
 RODAR COM ESSE COMANDO FUTURAMENTE VOU MELHORAR A DOCUMENTACAO
 python manage.py runserver_plus --cert-file localhost.crt --key-file localhost.key 0.0.0.0:8001
+
+
+EM PRODUCAO SE FOR USAR O S3
+export AWS_ACCESS_KEY_ID='sua-access-key'
+export AWS_SECRET_ACCESS_KEY='sua-secret-key'
