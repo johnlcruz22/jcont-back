@@ -159,7 +159,7 @@ AUTHENTICATION_BACKENDS = [
 #CORS_ALLOW_ALL_ORIGINS = True
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
-    'http://3.22.244.111'
+    'http://3.22.244.111',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
