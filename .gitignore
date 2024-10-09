@@ -1,6 +1,9 @@
+# Ignorar arquivos Python compilados
 *.pyc
 
+# Ignorar arquivos de log
+*.log
 
-# Ignorar pastas de bibliotecas
-/jcontback/jcontback/myenv/
-/jcontback/myenv/
+# Ignorar pastas do ambiente virtual
+/myenv/
+jcontback/jcontback/myenv/
