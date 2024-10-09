@@ -1,0 +1,6 @@
+*.pyc
+
+
+# Ignorar pastas de bibliotecas
+/jcontback/jcontback/myenv/
+/jcontback/myenv/

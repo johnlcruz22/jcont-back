@@ -1,0 +1,78 @@
+nohup: ignoring input
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '3.22.244.111:8001'. You may need to add '3.22.244.111' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/utils/deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '3.22.244.111:8001'. You may need to add '3.22.244.111' to ALLOWED_HOSTS.
+Bad Request: /api/login/
+[09/Oct/2024 14:31:04] "POST /api/login/ HTTP/1.1" 400 64998
+/opt/jcontback/jcont-back/jcontback/jcontback/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 09, 2024 - 14:23:13
+Django version 5.1, using settings 'jcontback.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/core/management/commands/runserver.py", line 134, in inner_run
+    self.check(display_num_errors=True)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/core/management/base.py", line 563, in check
+    raise SystemCheckError(msg)
+django.core.management.base.SystemCheckError: SystemCheckError: System check identified some issues:
+
+ERRORS:
+?: (corsheaders.E014) Origin 'http://3.22.244.111http://localhost:8000' in CORS_ALLOWED_ORIGINS should not have path
+
+System check identified 1 issue (0 silenced).
+/opt/jcontback/jcont-back/jcontback/jcontback/settings.py changed, reloading.
+Performing system checks...
+
+Watching for file changes with StatReloader
+/opt/jcontback/jcont-back/jcontback/jcontback/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 09, 2024 - 14:40:41
+Django version 5.1, using settings 'jcontback.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/core/management/commands/runserver.py", line 134, in inner_run
+    self.check(display_num_errors=True)
+  File "/opt/jcontback/jcont-back/jcontback/myenv/lib/python3.12/site-packages/django/core/management/base.py", line 563, in check
+    raise SystemCheckError(msg)
+django.core.management.base.SystemCheckError: SystemCheckError: System check identified some issues:
+
+ERRORS:
+?: (corsheaders.E014) Origin 'http://3.22.244.111http://localhost:8000' in CORS_ALLOWED_ORIGINS should not have path
+
+System check identified 1 issue (0 silenced).

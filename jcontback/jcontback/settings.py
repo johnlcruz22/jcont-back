@@ -159,6 +159,7 @@ AUTHENTICATION_BACKENDS = [
 #CORS_ALLOW_ALL_ORIGINS = True
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
+    'http://3.22.244.111'
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
@@ -175,7 +176,7 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', '3.22.244.111']
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
@@ -184,4 +185,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'https://localhost',
     'https://127.0.0.1:8000',
+    'http://3.22.244.111',
 ]
