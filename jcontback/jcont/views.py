@@ -211,6 +211,13 @@ class UploadBaseExcelView(APIView):
 
             # Remover espaços em branco e duplicados nos nomes das colunas
             df.columns = df.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
+            
+            # Remover linhas completamente vazias
+            df.dropna(how='all', inplace=True)
+            
+            # Verifique o tamanho do DataFrame
+            total_rows = len(df)
+            
             # Forçar 'CODIGO SEM PONTO' como int, preenchendo valores nulos com 0 (ou outro valor que fizer sentido)
             df['CODIGO SEM PONTO'] = df['CODIGO SEM PONTO'].fillna(0).astype(int)
 
@@ -218,6 +225,7 @@ class UploadBaseExcelView(APIView):
             print(df.columns)
 
             for index, row in df.iterrows():
+                print(f"Total de linhas no DataFrame: {total_rows}")
                 # Extrair os valores de cada campo no arquivo Excel
                 tipo                 = row.get('TIPO')
                 codigo_original_tipi = row.get('CODIGO ORIGINAL TIPI')
@@ -239,16 +247,10 @@ class UploadBaseExcelView(APIView):
                     return Response({"error": f"Valores ausentes na linha {index}."}, status=status.HTTP_400_BAD_REQUEST)
                
                 # Verifique se descricao_tipi é uma string
-                if isinstance(descricao_tipi, str) and len(descricao_tipi) > 255:
-                    descricao_tipi = descricao_tipi[:255]  # Trunca a string
+                if isinstance(descricao_tipi, str) and len(descricao_tipi) > 254:
+                    descricao_tipi = descricao_tipi[:254]  # Trunca a string
                 
-                # Tratar a coluna 'redução' para armazenar como inteiro
-                if isinstance(reducao, str) and reducao.endswith('%'):
-                    try:
-                        reducao = int(reducao.strip('%'))  # Converter para inteiro
-                    except ValueError:
-                        print(f"Valor de redução inválido na linha {index}.")
-                        return Response({"error": f"Valor de redução inválido na linha {index}."}, status=status.HTTP_400_BAD_REQUEST)
+
                 # Crie uma instância do modelo e salve os dados no banco de dados
                 obj = DadosReferencia(
                     tipo = tipo,          
@@ -265,14 +267,15 @@ class UploadBaseExcelView(APIView):
                     etc = etc,
                     reducao = reducao         
                 )
-                obj.clean()
+                print(f"Antes do save >>> {index}")
                 obj.save()  # Salvar no banco de dados
+                print(f"Depois do save >>> {index}")
 
             return Response({"message": "Dados inseridos com sucesso no banco de dados!"}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    
+        
 class CompareDadosView(APIView):
     """
     Atualiza os dados de todas as linhas de ClienteExcel com base nos dados de DadosReferencia

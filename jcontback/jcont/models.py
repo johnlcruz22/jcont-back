@@ -130,11 +130,5 @@ class DadosReferencia(models.Model):
     etc = models.CharField(max_length=9, default="NT")
     reducao = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
-    def clean(self):
-        # Limite de caracteres para descricao_tipi
-        max_length = self._meta.get_field('descricao_tipi').max_length
-        if len(self.descricao_tipi) > max_length:
-            self.descricao_tipi = self.descricao_tipi[:max_length]  # Trunca a string
-            
     def __str__(self):
         return self.codigo_sem_ponto
