@@ -161,7 +161,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'https://localhost:8000',
     'https://localhost',
-    'https://127.0.0.1:8000',]
+    'https://127.0.0.1:8000',
+    'https://jcont.onrender.com',
+    'http://jcont.onrender.com'
+    ]
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -172,7 +175,9 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', 'jcont-back.onrender.com']
+SECURE_SSL_REDIRECT = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', 'jcont-back.onrender.com', 'jcont.onrender.com']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
