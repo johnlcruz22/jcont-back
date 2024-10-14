@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,8 +26,8 @@ SECRET_KEY = 'django-insecure-i*&72thqx7x&litah*_z8l=6k#()%6u0y$wb9^bp4$^-!vl$#0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000','https://localhost:8000', 'https://127.0.0.1:8000']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '3.22.244.111']
+CSRF_TRUSTED_ORIGINS = ['http://3.22.244.111/', 'http://localhost:8000', 'http://127.0.0.1:8000','https://localhost:8000', 'https://127.0.0.1:8000']
 
 # Application definition
 
@@ -93,13 +94,23 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jcont',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
+        'USER': 'jcont',
+        'PASSWORD': 'VpDOEaRwjfIN78F8ppXeEmKXiO1qgKpp',
+        'HOST': 'dpg-cs6k01aj1k6c73a5i27g-a',
         'PORT': '5432',
     }
 }
 
+
+# S3
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'jcontbucket'
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
+TIMEOUT = 600  # 10 minutos (ajuste conforme necessário)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -152,6 +163,7 @@ AUTHENTICATION_BACKENDS = [
 #CORS_ALLOW_ALL_ORIGINS = True
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
+    'http://3.22.244.111',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
@@ -168,7 +180,7 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', '3.22.244.111']
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
@@ -177,4 +189,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'https://localhost',
     'https://127.0.0.1:8000',
+    'http://3.22.244.111',
 ]
