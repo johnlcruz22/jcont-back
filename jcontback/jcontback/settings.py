@@ -157,7 +157,7 @@ AUTHENTICATION_BACKENDS = [
 #CORS_ALLOW_ALL_ORIGINS = True
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
-    'http://3.22.244.111',
+    'http://jcont-back.onrender.com',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
@@ -174,7 +174,7 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', '3.22.244.111']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', 'jcont-back.onrender.com']
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
