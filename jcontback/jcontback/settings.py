@@ -26,9 +26,6 @@ SECRET_KEY = 'django-insecure-i*&72thqx7x&litah*_z8l=6k#()%6u0y$wb9^bp4$^-!vl$#0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '3.22.244.111']
-CSRF_TRUSTED_ORIGINS = ['http://3.22.244.111/', 'http://localhost:8000', 'http://127.0.0.1:8000','https://localhost:8000', 'https://127.0.0.1:8000']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -177,6 +174,8 @@ CORS_ALLOW_METHODS = [
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', 'jcont-back.onrender.com']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://localhost',
@@ -184,5 +183,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8000',
     'https://localhost',
     'https://127.0.0.1:8000',
+    'https://jcont-back.onrender.com',
     'http://3.22.244.111',
 ]
