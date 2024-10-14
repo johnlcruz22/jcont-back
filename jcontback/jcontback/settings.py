@@ -93,20 +93,14 @@ WSGI_APPLICATION = 'jcontback.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jcont',
-        'USER': 'jcont',
-        'PASSWORD': 'Jcont@2024',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME'),          # Nome do banco de dados
+        'USER': os.environ.get('DB_USER'),          # Usuário do banco de dados
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Senha do banco de dados
+        'HOST': os.environ.get('DB_HOST'),          # Host do banco de dados
+        'PORT': os.environ.get('DB_PORT', '5432'),  # Porta do banco de dados
     }
 }
 
-
-# S3
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'jcontbucket'
 
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
