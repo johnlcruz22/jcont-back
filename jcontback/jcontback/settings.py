@@ -158,6 +158,7 @@ AUTHENTICATION_BACKENDS = [
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
     'http://jcont-back.onrender.com',
+    'https://jcont-back.onrender.com',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
