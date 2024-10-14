@@ -182,6 +182,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://jcont.onrender.com',
+    'http://jcont.onrender.com',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',

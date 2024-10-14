@@ -95,8 +95,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'jcont',
         'USER': 'jcont',
-        'PASSWORD': 'VpDOEaRwjfIN78F8ppXeEmKXiO1qgKpp',
-        'HOST': 'dpg-cs6k01aj1k6c73a5i27g-a',
+        'PASSWORD': 'Jcont@2024',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
