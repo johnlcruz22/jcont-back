@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 import json
 import pandas as pd
+import time
 from .models import(
     CustomUser, 
     Loja, 
@@ -276,6 +277,8 @@ class UploadBaseExcelView(APIView):
                 # Salvar o lote no banco de dados
                 DadosReferencia.objects.bulk_create(batch_objects)
                 #print(f"Lote {start} - {end} salvo com sucesso.")
+                # Pausar por 1 segundo após processar cada lote de 300 registros
+                time.sleep(3)
 
             return Response({"message": "Dados inseridos com sucesso no banco de dados!"}, status=status.HTTP_200_OK)
 
