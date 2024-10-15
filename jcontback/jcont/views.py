@@ -49,7 +49,6 @@ class RegisterView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         except ValidationError as e:
-            print(e)
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
@@ -144,7 +143,7 @@ class UploadExcelView(APIView):
             # Remover espaços em branco nos nomes das colunas
             df.columns = df.columns.str.strip()
             # Inspecione as colunas
-            print(df.columns)
+            #print(df.columns)
 
             for index, row in df.iterrows():
                 # Acesse todas as colunas de forma segura
@@ -231,7 +230,7 @@ class UploadBaseExcelView(APIView):
                 batch_objects = []
                 
                 for index, row in batch_df.iterrows():
-                    print(f"Processando lote: {start} - {end}, Linha: {index}")
+                    #print(f"Processando lote: {start} - {end}, Linha: {index}")
                     
                     tipo                 = row.get('TIPO')
                     codigo_original_tipi = row.get('CODIGO ORIGINAL TIPI')
@@ -249,7 +248,7 @@ class UploadBaseExcelView(APIView):
 
                     # Verifique se as colunas necessárias estão presentes
                     if None in [codigo_sem_ponto, descricao_tipi, cst_icms_sp, cst_pis, cst_cofins, ipi]:
-                        print(f"Valores ausentes na linha {index}")
+                        #print(f"Valores ausentes na linha {index}")
                         return Response({"error": f"Valores ausentes na linha {index}."}, status=status.HTTP_400_BAD_REQUEST)
                    
                     # Verifique se descricao_tipi é uma string e limite o tamanho
@@ -276,7 +275,7 @@ class UploadBaseExcelView(APIView):
 
                 # Salvar o lote no banco de dados
                 DadosReferencia.objects.bulk_create(batch_objects)
-                print(f"Lote {start} - {end} salvo com sucesso.")
+                #print(f"Lote {start} - {end} salvo com sucesso.")
 
             return Response({"message": "Dados inseridos com sucesso no banco de dados!"}, status=status.HTTP_200_OK)
 
