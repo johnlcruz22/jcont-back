@@ -204,34 +204,26 @@ class UploadBaseExcelView(APIView):
             return Response({"error": "Nenhum arquivo fornecido."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            # Limpar os dados existentes
             DadosReferencia.objects.all().delete()
-            df = pd.read_excel(file)
 
-            # Remover espaços em branco e duplicados nos nomes das colunas
-            df.columns = df.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
+            # Defina o tamanho do chunk para processamento em partes menores
+            chunksize = 1000  # Ajuste conforme a capacidade da sua instância
+            
+            # Ler o arquivo em chunks
+            for chunk in pd.read_excel(file, chunksize=chunksize):
+                # Remover espaços em branco e duplicados nos nomes das colunas
+                chunk.columns = chunk.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
 
-            # Remover linhas completamente vazias
-            df.dropna(how='all', inplace=True)
+                # Remover linhas completamente vazias
+                chunk.dropna(how='all', inplace=True)
 
-            # Verifique o tamanho do DataFrame
-            total_rows = len(df)
-
-            # Forçar 'CODIGO SEM PONTO' como int, preenchendo valores nulos com 0
-            df['CODIGO SEM PONTO'] = df['CODIGO SEM PONTO'].fillna(0).astype('Int64')
-
-            # Defina o tamanho do lote
-            batch_size = 500  # Ajuste conforme a capacidade da sua instância
-
-            # Processar em lotes
-            for start in range(0, total_rows, batch_size):
-                end = min(start + batch_size, total_rows)
-                batch_df = df.iloc[start:end]
+                # Forçar 'CODIGO SEM PONTO' como int, preenchendo valores nulos com 0
+                chunk['CODIGO SEM PONTO'] = chunk['CODIGO SEM PONTO'].fillna(0).astype('Int64')
 
                 batch_objects = []
                 
-                for index, row in batch_df.iterrows():
-                    #print(f"Processando lote: {start} - {end}, Linha: {index}")
-                    
+                for index, row in chunk.iterrows():
                     tipo                 = row.get('TIPO')
                     codigo_original_tipi = row.get('CODIGO ORIGINAL TIPI')
                     codigo_sem_ponto     = row.get('CODIGO SEM PONTO')
@@ -248,9 +240,8 @@ class UploadBaseExcelView(APIView):
 
                     # Verifique se as colunas necessárias estão presentes
                     if None in [codigo_sem_ponto, descricao_tipi, cst_icms_sp, cst_pis, cst_cofins, ipi]:
-                        #print(f"Valores ausentes na linha {index}")
                         return Response({"error": f"Valores ausentes na linha {index}."}, status=status.HTTP_400_BAD_REQUEST)
-                   
+                    
                     # Verifique se descricao_tipi é uma string e limite o tamanho
                     if isinstance(descricao_tipi, str) and len(descricao_tipi) > 254:
                         descricao_tipi = descricao_tipi[:254]
@@ -275,12 +266,12 @@ class UploadBaseExcelView(APIView):
 
                 # Salvar o lote no banco de dados
                 DadosReferencia.objects.bulk_create(batch_objects)
-                #print(f"Lote {start} - {end} salvo com sucesso.")
 
             return Response({"message": "Dados inseridos com sucesso no banco de dados!"}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
         
 class CompareDadosView(APIView):
