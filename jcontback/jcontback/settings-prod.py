@@ -101,6 +101,16 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),          # Nome do banco de dados
+        'USER': os.environ.get('DB_USER'),          # Usuário do banco de dados
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Senha do banco de dados
+        'HOST': os.environ.get('DB_HOST'),          # Host do banco de dados
+        'PORT': os.environ.get('DB_PORT', '5432'),  # Porta do banco de dados
+    }
+}
 
 # S3
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

@@ -17,8 +17,8 @@ from .models import (
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model        = CustomUser
-        fields       = ('id', 'username', 'email', 'password', 'tipo')
+        model = CustomUser
+        fields = ('id', 'username', 'email', 'password', 'tipo')
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_email(self, value):

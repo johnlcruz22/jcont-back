@@ -16,7 +16,10 @@ from .views import (
     UploadBaseExcelView,
     ClienteExcelDetailView,
     AtualizarClienteView,
-    DownloadExcelView
+    DownloadExcelView,
+    ClienteDeleteView,
+    ClienteDetailView,
+    ClienteUpdateView
 )
 
 urlpatterns = [
@@ -32,11 +35,15 @@ urlpatterns = [
     path('tipos-regime/',   TipoRegimeListView.as_view(), name='tipos-regime-list'),
     path('ramoatividade/',  RamoAtividadeListView.as_view(), name='ramo-atividade-list'),
     path('cnaes/select/',   CNAESelectListView.as_view(), name='cnae-select-list'),
+    path('check-cnpj/',     CheckCNPJView.as_view(), name='check-cnpj'),
 
 
     #ROTAS CLIENTE
-    path('cliente/create/', ClienteCreateView.as_view(), name='cliente-create'),
-    path('clientes/',       ClienteListView.as_view(), name='clientes-list'), 
+    path('cliente/create/',         ClienteCreateView.as_view(), name='cliente-create'),
+    path('clientes/',               ClienteListView.as_view(), name='clientes-list'), 
+    path('cliente/delete/<int:pk>/',ClienteDeleteView.as_view(), name='cliente-delete'),
+    path('cliente/edit/<int:pk>/',  ClienteDetailView.as_view(), name='cliente-edit'),
+    path('cliente/update/<int:id>/',ClienteUpdateView.as_view(), name='cliente-update'),
     
     #ROTAS ARQUIVO
     path('upload/<int:id>/',    UploadExcelView.as_view(), name='upload-excel'),
