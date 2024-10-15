@@ -13,7 +13,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 import json
 import pandas as pd
-import openpyxl
 from .models import(
     CustomUser, 
     Loja, 
@@ -205,78 +204,84 @@ class UploadBaseExcelView(APIView):
             return Response({"error": "Nenhum arquivo fornecido."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Limpar os dados existentes
             DadosReferencia.objects.all().delete()
+            df = pd.read_excel(file)
 
-            # Carregar o arquivo Excel usando openpyxl
-            workbook = openpyxl.load_workbook(file, read_only=True)
-            sheet = workbook.active
+            # Remover espaços em branco e duplicados nos nomes das colunas
+            df.columns = df.columns.str.strip().str.replace(r'\s+', ' ', regex=True)
 
-            # Pular a primeira linha se for o cabeçalho
-            header = next(sheet.iter_rows(values_only=True))
+            # Remover linhas completamente vazias
+            df.dropna(how='all', inplace=True)
 
-            # Tamanho do lote para inserção no banco de dados
-            batch_size = 1000
-            batch_objects = []
+            # Verifique o tamanho do DataFrame
+            total_rows = len(df)
 
-            # Processar cada linha na planilha
-            for row in sheet.iter_rows(values_only=True):
-                # Criar um dicionário com os dados da linha
-                data = dict(zip(header, row))
+            # Forçar 'CODIGO SEM PONTO' como int, preenchendo valores nulos com 0
+            df['CODIGO SEM PONTO'] = df['CODIGO SEM PONTO'].fillna(0).astype('Int64')
 
-                tipo                 = data.get('TIPO')
-                codigo_original_tipi = data.get('CODIGO ORIGINAL TIPI')
-                codigo_sem_ponto     = data.get('CODIGO SEM PONTO', 0)
-                descricao_tipi       = data.get('DESCRIÇÃO TIPI')
-                ipi                  = data.get('IPI')
-                cst_pis              = data.get('CST PIS')
-                cst_cofins           = data.get('CST COFINS')
-                cst_icms_sp          = data.get('CST ICMS SP')
-                cst_icms_rj          = data.get('CST ICMS RJ')
-                cst_icms_es          = data.get('CST ICMS ES')
-                cst_icms_mg          = data.get('CST ICMS MG')
-                etc                  = data.get('ETC')
-                reducao              = 0
+            # Defina o tamanho do lote
+            batch_size = 300  # Ajuste conforme a capacidade da sua instância
 
-                # Verificar se as colunas necessárias estão presentes
-                if None in [codigo_sem_ponto, descricao_tipi, cst_icms_sp, cst_pis, cst_cofins, ipi]:
-                    return Response({"error": f"Valores ausentes na linha."}, status=status.HTTP_400_BAD_REQUEST)
+            # Processar em lotes
+            for start in range(0, total_rows, batch_size):
+                end = min(start + batch_size, total_rows)
+                batch_df = df.iloc[start:end]
+
+                batch_objects = []
                 
-                # Limitar o tamanho de descricao_tipi
-                if isinstance(descricao_tipi, str) and len(descricao_tipi) > 254:
-                    descricao_tipi = descricao_tipi[:254]
+                for index, row in batch_df.iterrows():
+                    #print(f"Processando lote: {start} - {end}, Linha: {index}")
+                    
+                    tipo                 = row.get('TIPO')
+                    codigo_original_tipi = row.get('CODIGO ORIGINAL TIPI')
+                    codigo_sem_ponto     = row.get('CODIGO SEM PONTO')
+                    descricao_tipi       = row.get('DESCRIÇÃO TIPI')
+                    ipi                  = row.get('IPI')
+                    cst_pis              = row.get('CST PIS')
+                    cst_cofins           = row.get('CST COFINS')
+                    cst_icms_sp          = row.get('CST ICMS SP')
+                    cst_icms_rj          = row.get('CST ICMS RJ')
+                    cst_icms_es          = row.get('CST ICMS ES')
+                    cst_icms_mg          = row.get('CST ICMS MG')
+                    etc                  = row.get('ETC')
+                    reducao              = 0
 
-                # Adicionar a instância do modelo na lista para o lote
-                obj = DadosReferencia(
-                    tipo=tipo,
-                    codigo_original_tipi=codigo_original_tipi,
-                    codigo_sem_ponto=codigo_sem_ponto,
-                    descricao_tipi=descricao_tipi,
-                    ipi=ipi,
-                    cst_pis=cst_pis,
-                    cst_cofins=cst_cofins,
-                    cst_icms_sp=cst_icms_sp,
-                    cst_icms_rj=cst_icms_rj,
-                    cst_icms_es=cst_icms_es,
-                    cst_icms_mg=cst_icms_mg,
-                    etc=etc,
-                    reducao=reducao
-                )
-                batch_objects.append(obj)
+                    # Verifique se as colunas necessárias estão presentes
+                    if None in [codigo_sem_ponto, descricao_tipi, cst_icms_sp, cst_pis, cst_cofins, ipi]:
+                        #print(f"Valores ausentes na linha {index}")
+                        return Response({"error": f"Valores ausentes na linha {index}."}, status=status.HTTP_400_BAD_REQUEST)
+                   
+                    # Verifique se descricao_tipi é uma string e limite o tamanho
+                    if isinstance(descricao_tipi, str) and len(descricao_tipi) > 254:
+                        descricao_tipi = descricao_tipi[:254]
 
-                # Verificar se o tamanho do lote foi atingido
-                if len(batch_objects) >= batch_size:
-                    DadosReferencia.objects.bulk_create(batch_objects)
-                    batch_objects.clear()
+                    # Adicionar a instância do modelo na lista para o lote
+                    obj = DadosReferencia(
+                        tipo=tipo,
+                        codigo_original_tipi=codigo_original_tipi,
+                        codigo_sem_ponto=codigo_sem_ponto,
+                        descricao_tipi=descricao_tipi,
+                        ipi=ipi,
+                        cst_pis=cst_pis,
+                        cst_cofins=cst_cofins,
+                        cst_icms_sp=cst_icms_sp,
+                        cst_icms_rj=cst_icms_rj,
+                        cst_icms_es=cst_icms_es,
+                        cst_icms_mg=cst_icms_mg,
+                        etc=etc,
+                        reducao=reducao
+                    )
+                    batch_objects.append(obj)
 
-            # Salvar quaisquer objetos restantes no banco de dados
-            if batch_objects:
+                # Salvar o lote no banco de dados
                 DadosReferencia.objects.bulk_create(batch_objects)
+                #print(f"Lote {start} - {end} salvo com sucesso.")
 
             return Response({"message": "Dados inseridos com sucesso no banco de dados!"}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
         
