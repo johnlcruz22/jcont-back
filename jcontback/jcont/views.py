@@ -221,7 +221,7 @@ class UploadBaseExcelView(APIView):
             df['CODIGO SEM PONTO'] = df['CODIGO SEM PONTO'].fillna(0).astype('Int64')
 
             # Defina o tamanho do lote
-            batch_size = 200  # Ajuste conforme a capacidade da sua instância
+            batch_size = 3000  # Ajuste conforme a capacidade da sua instância
 
             # Processar em lotes
             for start in range(0, total_rows, batch_size):
