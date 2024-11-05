@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'jcontback.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jcont',
-        'USER': 'jcont',
-        'PASSWORD': 'Jcont@2024',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME'),          # Nome do banco de dados
+        'USER': os.environ.get('DB_USER'),          # Usuário do banco de dados
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Senha do banco de dados
+        'HOST': os.environ.get('DB_HOST'),          # Host do banco de dados
+        'PORT': os.environ.get('DB_PORT', '5432'),  # Porta do banco de dados
     }
 }
 
