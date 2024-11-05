@@ -26,9 +26,6 @@ SECRET_KEY = 'django-insecure-i*&72thqx7x&litah*_z8l=6k#()%6u0y$wb9^bp4$^-!vl$#0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '3.22.244.111']
-CSRF_TRUSTED_ORIGINS = ['http://3.22.244.111/', 'http://localhost:8000', 'http://127.0.0.1:8000','https://localhost:8000', 'https://127.0.0.1:8000']
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -101,22 +98,6 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),          # Nome do banco de dados
-        'USER': os.environ.get('DB_USER'),          # Usuário do banco de dados
-        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Senha do banco de dados
-        'HOST': os.environ.get('DB_HOST'),          # Host do banco de dados
-        'PORT': os.environ.get('DB_PORT', '5432'),  # Porta do banco de dados
-    }
-}
-
-# S3
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'jcontbucket'
 
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600
@@ -173,13 +154,19 @@ AUTHENTICATION_BACKENDS = [
 #CORS_ALLOW_ALL_ORIGINS = True
 # Alternativamente, você pode permitir apenas domínios específicos:
 CORS_ALLOWED_ORIGINS = [
-    'http://3.22.244.111',
+    'http://jcont-back.onrender.com',
+    'https://jcont-back.onrender.com',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
     'https://localhost:8000',
     'https://localhost',
-    'https://127.0.0.1:8000',]
+    'https://127.0.0.1:8000',
+    'https://jcont.onrender.com',
+    'http://jcont.onrender.com'
+    ]
+
+RECAPTCHA_SECRET_KEY = '6LcxwXgUAAAAADqKO_Gd8tzwnGZottNes6d7bXlp'
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -190,14 +177,21 @@ CORS_ALLOW_METHODS = [
     'OPTIONS',
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.0.2', '3.22.244.111']
+#SECURE_SSL_REDIRECT = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '172.20.10.9', '192.168.15.5', 'jcont-back.onrender.com', 'jcont.onrender.com']
+
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://jcont.onrender.com',
+    'http://jcont.onrender.com',
     'http://localhost:8000',
     'http://localhost',
     'http://127.0.0.1:8000',
     'https://localhost:8000',
     'https://localhost',
     'https://127.0.0.1:8000',
+    'https://jcont-back.onrender.com',
     'http://3.22.244.111',
 ]
