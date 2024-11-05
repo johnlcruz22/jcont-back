@@ -19,7 +19,8 @@ from .views import (
     DownloadExcelView,
     ClienteDeleteView,
     ClienteDetailView,
-    ClienteUpdateView
+    ClienteUpdateView,
+    DownloadDadosReferenciaView
 )
 
 urlpatterns = [
@@ -54,6 +55,6 @@ urlpatterns = [
     path('corrigir/<int:id>/',  CorrigirDadosView.as_view(), name='corrigir-dados'),
     path('salvar/',             AtualizarClienteView.as_view(), name='salvar-dados'),
     path('download/<int:id>/',  DownloadExcelView.as_view(), name='download-excel'),
-
     
+    path('download-dados-referencia/', DownloadDadosReferenciaView.as_view(), name='download-dados-referencia'),
 ]

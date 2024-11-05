@@ -9,6 +9,9 @@ from rest_framework import generics
 from django.views import View
 from django.http import JsonResponse
 from django.http import HttpResponse
+from openpyxl import Workbook
+from django.http import StreamingHttpResponse
+from io import BytesIO
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 import json
@@ -389,7 +392,6 @@ class UploadBaseExcelView(APIView):
                     cst_icms_rj          = row.get('CST ICMS RJ')
                     cst_icms_es          = row.get('CST ICMS ES')
                     cst_icms_mg          = row.get('CST ICMS MG')
-                    etc                  = row.get('ETC')
                     reducao              = 0
 
                     # Verifique se as colunas necessárias estão presentes
@@ -414,7 +416,6 @@ class UploadBaseExcelView(APIView):
                         cst_icms_rj=cst_icms_rj,
                         cst_icms_es=cst_icms_es,
                         cst_icms_mg=cst_icms_mg,
-                        etc=etc,
                         reducao=reducao
                     )
                     batch_objects.append(obj)
@@ -502,3 +503,60 @@ class CorrigirDadosView(APIView):
 
         return Response({'message': 'Data corrected'}, status=status.HTTP_200_OK)
   
+class DownloadDadosReferenciaView(APIView):
+    """
+    Gera e faz o download de um arquivo Excel com os dados de DadosReferencia com as colunas especificadas.
+    """
+    def get(self, request, *args, **kwargs):
+        # Busca todos os dados de DadosReferencia com somente as colunas necessárias
+        queryset = DadosReferencia.objects.values(
+            'tipo', 'codigo_original_tipi', 'codigo_sem_ponto', 'descricao_tipi', 
+            'ipi', 'cst_pis', 'cst_cofins', 'cst_icms_sp', 'cst_icms_rj', 
+            'cst_icms_es', 'cst_icms_mg'
+        )
+
+        # Verifica se há dados disponíveis
+        if not queryset:
+            return Response({'error': 'Nenhum dado encontrado em DadosReferencia.'}, status=404)
+
+        # Cria um novo workbook usando openpyxl e configura a planilha
+        workbook = Workbook(write_only=True)  # Define write_only para streaming
+        sheet = workbook.create_sheet("DadosReferencia")
+
+        # Cabeçalho
+        header = [
+            'TIPO', 'CODIGO ORIGINAL TIPI', 'CODIGO SEM PONTO', 'DESCRIÇÃO TIPI', 
+            'IPI', 'CST PIS', 'CST COFINS', 'CST ICMS SP', 'CST ICMS RJ', 
+            'CST ICMS ES', 'CST ICMS MG'
+        ]
+        sheet.append(header)
+
+        # Adiciona os dados na planilha
+        for row in queryset:
+            sheet.append([
+                row['tipo'],
+                row['codigo_original_tipi'],
+                row['codigo_sem_ponto'],
+                row['descricao_tipi'],
+                row['ipi'],
+                row['cst_pis'],
+                row['cst_cofins'],
+                row['cst_icms_sp'],
+                row['cst_icms_rj'],
+                row['cst_icms_es'],
+                row['cst_icms_mg']
+            ])
+
+        # Salva o workbook em um objeto BytesIO
+        output = BytesIO()
+        workbook.save(output)
+        output.seek(0)  # Retorna ao início do arquivo
+
+        # Cria a resposta HTTP para download
+        response = StreamingHttpResponse(
+            output,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="dados_referencia.xlsx"'
+
+        return response
