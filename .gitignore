@@ -7,3 +7,5 @@
 # Ignorar pastas do ambiente virtual
 /myenv/
 jcontback/jcontback/myenv/
+/jcontback/myenv/
+jcontback/myenv/

@@ -460,7 +460,7 @@ class UploadExcelView(APIView):
                 ncm = row.get('NCM')
                 descricao_prod = row.get('Descrição Prod')
                 cst_icms = row.get('CST ICMS')
-                cst_pis = row.get('CST  PIS')
+                cst_pis = row.get('CST PIS')
                 cst_cofins = row.get('CST COFINS')
 
                 # Verifique se as colunas necessárias estão presentes
